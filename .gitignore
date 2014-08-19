@@ -1,0 +1,11 @@
+logs/*
+!.gitkeep
+node_modules/
+bower_components/
+tmp
+test/
+*/img/*
+*/vendor/*
+.DS_Store
+.idea
+*.log
