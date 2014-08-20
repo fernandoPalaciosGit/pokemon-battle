@@ -46,8 +46,11 @@ var PokemonRestFullFactory = function ($resource){
 
 var PokemonFactory = function(){
 	return {
+		// contador de pokemon construidos
 		loadPokemonAjax : [0, 0],
+		// lista de Pokemon construidos por nosotros
 		listPokemon : [],
+		// lista de pokemon y su API URL
 		listPokemonData: []
 	};
 };
