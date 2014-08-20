@@ -47,7 +47,8 @@ var PokemonRestFullFactory = function ($resource){
 var PokemonFactory = function(){
 	return {
 		loadPokemonAjax : [0, 0],
-		listPokemon : []
+		listPokemon : [],
+		listPokemonData: []
 	};
 };
 

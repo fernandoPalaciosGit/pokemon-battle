@@ -19,23 +19,18 @@ var PokemonSelectController = function ($scope, PokemonRest, PokemonFact){
 
 	//recuperamos la lista de todos los pokemon (solo nombres)
 	$scope.loadPokemonList = function (){
-		PokemonRest.getPokedex().
-			$promise.then( function (data){ // [270 objetos]
 
-				// desde el primero hasta el ultimo (indices en factoria)
-				for (var i = PokemonFact.loadPokemonAjax[0]; i < PokemonFact.loadPokemonAjax[1]; i++) {
-					
-					var newPokemon = new Pokemon(	data.pokemon[i].name,
-															data.pokemon[i].resource_uri.split('/')[3],
-															data.pokemon[i].resource_uri );
+		// desde el primero hasta el ultimo (indices en factoria)
+		for (var i = PokemonFact.loadPokemonAjax[0]; i < PokemonFact.loadPokemonAjax[1]; i++) {
+			var	listApiPoke = PokemonFact.listPokemonData,
+					newPokemon = new Pokemon(	listApiPoke[i].name,
+														listApiPoke[i].resource_uri.split('/')[3],
+														listApiPoke[i].resource_uri );
 
-					$scope.pokemonList.push( newPokemon );
-				}
+			$scope.pokemonList.push( newPokemon );
+		}
 
-			}).
-			then( function (data){
-				$scope.loadPokemonSprite();				
-			});
+		$scope.loadPokemonSprite();
 	};
 
 	// imagen y descripcion de los pokemons (solo los 10 primeros)
@@ -50,6 +45,7 @@ var PokemonSelectController = function ($scope, PokemonRest, PokemonFact){
 
 			PokemonRest.getPokemon( $scope.pokemonList[ i ].pokeNum ).
 				$promise.then( function (data){
+					console.log(data);
 
 					PokemonRest.getSprite( data.sprites[0].resource_uri ).
 						$promise.then( function (data){
@@ -80,8 +76,15 @@ var PokemonSelectController = function ($scope, PokemonRest, PokemonFact){
 		Añadimos 10 pokemon a la lista de nuestra vista */
 	if ( PokemonFact.loadPokemonAjax[1] === 0 ){
 		PokemonFact.loadPokemonAjax = [0, 10];
-		// $scope.loadPokemonList( PokemonFact.loadPokemonAjax );
-		$scope.loadPokemonList();
+
+		//recuperar una unica vez la lista de pokemon y almacenarlo en una variable de la factoria
+		PokemonRest.getPokedex().
+			$promise.then( function (data){
+
+				PokemonFact.listPokemonData = data.pokemon; //LISTA DE POKEMON Y URL
+				$scope.loadPokemonList();
+
+			});
 	}
 
 
