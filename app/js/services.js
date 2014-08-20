@@ -1,7 +1,7 @@
 'use strict';
 
 var PokemonRestFullFactory = function ($resource){
-	var	factory = {};
+	var factory = {};
 
 	// LISTA DE POKEMON
 	factory.getPokedex = function () {
@@ -20,39 +20,30 @@ var PokemonRestFullFactory = function ($resource){
 					{ get: { method:'JSONP' } } ).get();
 	};
 
-	// SPRITE DE POPKEMON
-	factory.getSprite = function (uriSprite) {
+	// CUALQUIER URI DE LA API //pokeapi.co
+	factory.getUri = function (uri) {
 		// JSONP (devolvemos una funcion que capturaremos con una promiso
-		return $resource(	'http://pokeapi.co' + uriSprite,
+		return $resource(	'http://pokeapi.co' + uri,
 								{callback: 'JSON_CALLBACK', alt: 'json'},
 								{ get: { method:'JSONP' } } ).get();
 	};
 
-	// INFORMACION DE POPKEMON
-	factory.getPokeInfo = function (pokeId) {
-		// JSONP (devolvemos una funcion que capturaremos con una promiso
-		return $resource(	'http://pokeapi.co/api/v1/pokemon/:query',
-								{callback: 'JSON_CALLBACK', alt: 'json'},
-								{ get: { method:'JSONP', params: {query: pokeId} } } ).get();
-	};
-
-	/*
-	return $resource('http://pokeapi.co/api/v1/:query', {}, {
-		getPokedex: { method: 'GET', params: {query: 'pokedex/1/'}, isArray: true }
-	});
-	 */
 	return factory;
 };
 
 var PokemonFactory = function(){
-	return {
-		// contador de pokemon construidos
-		loadPokemonAjax : [0, 0],
-		// lista de Pokemon construidos por nosotros
-		listPokemon : [],
-		// lista de pokemon y su API URL
-		listPokemonData: []
-	};
+	var factory = {};
+
+	// contador de pokemon construidos
+	factory.loadPokemonAjax = [0, 0];
+	
+	// lista de Pokemon construidos por nosotros
+	factory.listPokemon = [];
+
+	// lista de pokemon y su API URL
+	factory.listPokemonData = [];
+
+	return factory;
 };
 
 angular.module('pokemonApp.services', ['ngResource']).

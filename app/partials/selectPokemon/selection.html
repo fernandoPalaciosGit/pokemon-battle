@@ -1,5 +1,9 @@
 <div class="view-selectionPokemon">
-	<h2>Selecciona tu pokemon de Combate</h2>
+	<p>
+		<h2>Selecciona tu pokemon de Combate</h2><br/>
+		<b class="lead">puedes encontrar {{allPokemonNum}} pokemones Nacionales</b>
+		
+	</p>
 
 	<p>Piedes elegir <strong>{{ numPokeSelect }}</strong> pokemon de esta lista</p>
 
@@ -27,7 +31,7 @@
 			<figure>
 		   	<h3>{{pokemon.pokeName}} <small>pokedex nacional num {{pokemon.pokeNum}}</small></h3>
 		   	<img alt="{{pokemon.pokeImg.alt}}" ng-src="{{pokemon.pokeImg.src}}">
-		   	<!-- <figcaption>{{pokemon.pokeDesc}}</figcaption> -->
+		   	<figcaption>{{pokemon.pokeDesc}}</figcaption>
 			</figure>
 		</li>
 	</ul>

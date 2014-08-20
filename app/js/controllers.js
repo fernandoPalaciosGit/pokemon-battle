@@ -1,6 +1,6 @@
 'use strict';
 
-var Pokemon = function(i, n, num, url, dataImg, attack, defense, desc, evol, speed, weight, moves){
+var Pokemon = function(i, n, num, url, dataImg, attack, defense, desc, arrEvol, speed, weight, arrMoves){
 	this.idList = i;
 	this.pokeName = n;
 	this.pokeNum = num;
@@ -8,11 +8,11 @@ var Pokemon = function(i, n, num, url, dataImg, attack, defense, desc, evol, spe
 	this.pokeImg = dataImg;
 	this.attack = attack;
 	this.defense = defense;
-	this.descriptions = desc; // [ objects ]
-	this.evolutions = evol; // [ objects ]
+	this.evolutions = arrEvol; // [ objects ]
 	this.speed = speed;
 	this.weight = weight;
-	this.moves =moves; // [ objects ]
+	this.moves = arrMoves; // [ objects ]
+	this.pokeDesc = desc; 
 };
 
 // Controlador de /selection.html
@@ -20,6 +20,7 @@ var PokemonSelectController = function ($scope, PokemonRest, PokemonFact){
 	//lista de pokemon cargados en la vista
 	$scope.pokemonList = PokemonFact.listPokemon;
 	$scope.numPokeSelect = PokemonFact.listPokemon.length;
+	$scope.allPokemonNum =  PokemonFact.listPokemonData.length;
 
 	// Constructor de lista de Pokemon
 	var loadPokemonList = function (){
@@ -33,7 +34,7 @@ var PokemonSelectController = function ($scope, PokemonRest, PokemonFact){
 			var pokenum = PokemonFact.listPokemonData[ i ].resource_uri.split('/')[3];
 
 			PokemonRest.getPokemon( pokenum ).
-				$promise.then( function (data){
+				$promise.then( function ( data ){
 
 					// datos de interes a nuestros pokemon
 					var	attack = data.attack,
@@ -44,24 +45,34 @@ var PokemonSelectController = function ($scope, PokemonRest, PokemonFact){
 							weight = data.weight,
 							moves = data.moves;
 
-					PokemonRest.getSprite( data.sprites[0].resource_uri ).
-						$promise.then( function (data){
-							var	dataImg = { alt: data.name, src: 'http://pokeapi.co'+data.image },
-									listApiPoke = PokemonFact.listPokemonData,
-									newPokemon = new Pokemon(	i,
-																		listApiPoke[i].name,
-																		listApiPoke[i].resource_uri.split('/')[3],
-																		listApiPoke[i].resource_uri,
-																		dataImg, attack, defense, desc, evol, speed, weight, moves );
+					PokemonRest.getUri( data.sprites[0].resource_uri ).
+						$promise.then( function ( data ){
+							var	listApiPoke = PokemonFact.listPokemonData,
+									dataImg = { alt: data.name, src: 'http://pokeapi.co'+data.image },
+									name = listApiPoke[i].name,
+									pokeID = listApiPoke[i].resource_uri.split('/')[3],
+									uri = listApiPoke[i].resource_uri;
 
-							// cargamos el pokemon en la factoria,
-							// el digest de Angular se encargra de asignar los valores a $scope.pokemonList
-							PokemonFact.listPokemon.push( newPokemon );
+							// seleccionamos una descripcion al azar
+							var	randomDescription = Math.floor( (Math.random() * desc.length) ),
+									descriptionUrl    = desc[randomDescription].resource_uri;
 
-							// contador de pokemon en lista
-							$scope.numPokeSelect = PokemonFact.listPokemon.length;
-							
-							loadPokemonList(); // RECURSIVIDAD
+							PokemonRest.getUri( descriptionUrl ).
+								$promise.then( function ( data ){
+									var	descRandom = data.description,
+											newPokemon = new Pokemon(	i, name, pokeID, uri, dataImg, attack,
+																		defense, descRandom, evol, speed, weight, moves );
+									
+									// cargamos el pokemon en la factoria,
+									// el digest de Angular se encargra de asignar los valores a $scope.pokemonList
+									PokemonFact.listPokemon.push( newPokemon );
+
+									// contador de pokemon en lista
+									$scope.numPokeSelect = PokemonFact.listPokemon.length;
+									
+									loadPokemonList(); // RECURSIVIDAD
+								} );
+
 						});
 
 				});
@@ -85,6 +96,7 @@ var PokemonSelectController = function ($scope, PokemonRest, PokemonFact){
 			$promise.then( function (data){
 
 				PokemonFact.listPokemonData = data.pokemon; //LISTA DE POKEMON Y URL
+				$scope.allPokemonNum = PokemonFact.listPokemonData.length; 
 				loadPokemonList();
 
 			});
