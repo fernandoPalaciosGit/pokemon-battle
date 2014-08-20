@@ -13,6 +13,7 @@ var Pokemon = function(i, n, num, url, dataImg, attack, defense, desc, arrEvol, 
 	this.weight = parseInt(weight, 10);
 	this.moves = arrMoves; // [ objects ]
 	this.pokeDesc = desc;
+	// console.log(this);
 };
 
 // Controlador de /selection.html
@@ -102,7 +103,7 @@ var PokemonSelectController = function ($scope, PokemonRest, PokemonFact){
 
 				PokemonFact.listPokemonData = data.pokemon; //LISTA DE POKEMON Y URL
 				$scope.pokemonApiList = data.pokemon;
-				
+
 				$scope.allPokemonNum = PokemonFact.listPokemonData.length; 
 				loadPokemonList();
 
@@ -113,7 +114,15 @@ var PokemonSelectController = function ($scope, PokemonRest, PokemonFact){
 };
 
 // Controlador de /info.html
-var PokemonInfoController = function ($scope){};
+var PokemonInfoController = function ($scope, $urlParams, PokemonRest, PokemonFact){
+	
+	var routeParam = {
+		id : $urlParams.id, // si accedo a esta vista por un pokemon ya cargado en nuestra lista
+		pokeUrl : window.decodeURIComponent( $urlParams.pokeId.replace(/\u0020/g, "/") )
+	};
+
+	console.log(routeParam);
+};
 
 // Controlador de /battle.html
 var PokemonBattleController = function ($scope){};
@@ -126,5 +135,5 @@ angular.module('pokemonApp.controllers', []).
 
 //INJECCION DE DEPENDENCIAS
 PokemonSelectController.$inject = [ '$scope', 'PokemonRestFullFact', 'PokemonFact'];
-PokemonInfoController.$inject = [ '$scope' ];
+PokemonInfoController.$inject = [ '$scope', '$routeParams', 'PokemonRestFullFact', 'PokemonFact' ];
 PokemonBattleController.$inject = [ '$scope' ];

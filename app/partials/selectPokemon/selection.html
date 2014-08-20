@@ -61,8 +61,9 @@
 						value="{{pokemon.resource_uri}}">{{pokemon.name}}</option>
 		</select>
 		
-		<input	type="button" data-apiurl="{{pokeApiNameSelected}}" value="¡¡ Eligelo !!"
-					ng-click="" ng-hide="!pokeApiNameSelected">
+		<a class="btn btn-info" ng-hide="!pokeApiNameSelected"
+			href="#/info/{{ (pokeApiNameSelected || '') | escapedUri }}">¡¡ Eligelo !!</a>
+		
 	</p>
 	<hr/>
 
@@ -77,10 +78,19 @@
 		<li	class="figure-pokemon"
 				ng-repeat="pokemon in pokemonList | filter:query | orderBy:orderProp:reverse">
 			<figure>
-		   	<h3>{{pokemon.pokeName}} <small>pokedex nacional num {{pokemon.pokeNum}}</small></h3>
-		   	<img alt="{{pokemon.pokeImg.alt}}" ng-src="{{pokemon.pokeImg.src}}">
+
+		   	<h3>
+		   		<a href="#/info/{{ pokemon.pokeUrl | escapedUri }}?id={{pokemon.idList}}">
+					{{pokemon.pokeName}}</a>
+		   		<small>pokedex nacional num {{pokemon.pokeNum}}</small>
+		   	</h3>
+
+		   	<a href="#/info/{{ pokemon.pokeUrl | escapedUri }}?id={{pokemon.idList}}">
+		   		 <img alt="{{pokemon.pokeImg.alt}}" ng-src="{{pokemon.pokeImg.src}}">
+            </a>
 		   	<figcaption>{{pokemon.pokeDesc}}</figcaption>
 		   	<!-- <ul>
+		   		<li>pokeUrl : {{pokemon.pokeUrl}}</li>
 		   		<li>idList : {{pokemon.idList}}</li>
 		   		<li>pokeName : {{pokemon.pokeName}}</li>
 		   		<li>pokeNum : {{pokemon.pokeNum}}</li>
