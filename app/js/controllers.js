@@ -88,8 +88,10 @@ var PokemonSelectController = function ($scope, PokemonRest, PokemonFact){
 
 				});
 		} else {
-			//permitimos volver a cargar mas pokemones
-			document.getElementById('btnLoadTenMore').disabled = false;
+			//permitimos volver a cargar mas Pokemones
+			if( !!document.getElementById('btnLoadTenMore') ){ //problem digest
+				document.getElementById('btnLoadTenMore').disabled = false;
+			}
 		}
 
 	};
@@ -133,7 +135,40 @@ var PokemonInfoController = function ($scope, $urlParams, PokemonRest, PokemonFa
 
 	if( isEmpty($scope.routeParam.id) ){
 		// Ajax to ApiRest for search pokemon
-		$scope.userPokemon = {};
+		PokemonRest.getPokemon( $scope.routeParam.pokeUrl.split('/')[3] ).
+				$promise.then( function ( data ){
+
+					// datos de interes a nuestros pokemon
+					var	attack = data.attack,
+							defense = data.defense,
+							desc = data.descriptions,
+							evol = data.evolutions,
+							speed = data.speed,
+							weight = data.weight,
+							moves = data.moves,
+							name = data.name;
+
+					PokemonRest.getUri( data.sprites[0].resource_uri ).
+						$promise.then( function ( data ){
+							var	listApiPoke = PokemonFact.listPokemonData,
+									dataImg = { alt: data.name, src: 'http://pokeapi.co'+data.image },
+									pokeID = $scope.routeParam.pokeUrl.split('/')[3],
+									uri = $scope.routeParam.pokeUrl;
+
+							// seleccionamos una descripcion al azar
+							var	randomDescription = Math.floor( (Math.random() * desc.length) ),
+									descriptionUrl    = desc[randomDescription].resource_uri;
+
+							PokemonRest.getUri( descriptionUrl ).
+								$promise.then( function ( data ){
+									var	descRandom = data.description;
+									$scope.userPokemon = new Pokemon(	'no', name, pokeID, uri, dataImg, attack,
+																defense, descRandom, evol, speed, weight, moves );
+								} );
+
+						});
+
+				});
 	}else{
 		$scope.userPokemon = PokemonFact.listPokemon[$scope.routeParam.id];
 	}
