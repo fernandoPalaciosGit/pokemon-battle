@@ -3,16 +3,16 @@
 var Pokemon = function(i, n, num, url, dataImg, attack, defense, desc, arrEvol, speed, weight, arrMoves){
 	this.idList = i;
 	this.pokeName = n;
-	this.pokeNum = num;
+	this.pokeNum = parseInt(num, 10);
 	this.pokeUrl = url;
 	this.pokeImg = dataImg;
-	this.attack = attack;
-	this.defense = defense;
+	this.attack = parseInt(attack, 10);
+	this.defense = parseInt(defense, 10);
 	this.evolutions = arrEvol; // [ objects ]
-	this.speed = speed;
-	this.weight = weight;
+	this.speed = parseInt(speed, 10);
+	this.weight = parseInt(weight, 10);
 	this.moves = arrMoves; // [ objects ]
-	this.pokeDesc = desc; 
+	this.pokeDesc = desc;
 };
 
 // Controlador de /selection.html
@@ -21,6 +21,10 @@ var PokemonSelectController = function ($scope, PokemonRest, PokemonFact){
 	$scope.pokemonList = PokemonFact.listPokemon;
 	$scope.numPokeSelect = PokemonFact.listPokemon.length;
 	$scope.allPokemonNum =  PokemonFact.listPokemonData.length;
+
+	//valores predeterminados de filtros de ordenacion 'orderBy'
+	$scope.orderProp = 'idList';
+	$scope.reverse = 1;
 
 	// Constructor de lista de Pokemon
 	var loadPokemonList = function (){

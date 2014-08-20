@@ -5,15 +5,52 @@
 		
 	</p>
 
-	<p>Piedes elegir <strong>{{ numPokeSelect }}</strong> pokemon de esta lista</p>
+	<p>PUedes elegir <strong>{{ numPokeSelect }}</strong> pokemon de esta lista</p>
 
-	<p><span for="btnSearchListPokemon">Busca un Pokemon de la lista</span>
-		<input	id="btnSearchListPokemon"
-					type="search"
-					ng-model="pokeSearchName" />
-	</p>
+	<!-- FILTROS DE LISTA DE POKEMON CARGADOS -->
 
-	<p><span for="btnSearchListPokemon">Encuentra tu Pokemon adecuado</span>
+	<div class="col-md-2">
+		<p>
+			<span for="btnSearchListPokemon">Busca un Pokemon de la lista</span>
+			<input	id="btnSearchListPokemon"
+						type="search"
+						ng-model="query" />
+		</p>
+
+      <p>
+			<label for="selectOrdList">Ordenar la Lista de Pokemones</label> : 
+			
+			<!-- ORDEN ASCENDENTE -->
+			<select	id="selectOrdList" 
+						ng-model="orderProp" ng-show=" !reverse ">
+				<option value="" selected="selected" disabled="disabled"></option>
+				<option value="pokeName">alfabeticamente A -> Z</option>
+				<option value="pokeNum">lista Ascendente de pokemon Nacional</option>
+				<option value="attack">ataque más decadente</option>
+				<option value="defense">defensa más fragil</option>
+				<option value="speed">más lentos</option>
+				<option value="weight">más ligeros</option>
+			</select>
+
+			<!-- ORDEN DESCENDENTE -->
+			<select	id="selectOrdList" 
+						ng-model="orderProp" ng-show=" !!reverse ">
+				<option value="" selected="selected" disabled="disabled"></option>
+				<option value="pokeName">alfabeticamente Z -> A</option>
+				<option value="pokeNum">lista Descendente de pokemon Nacional</option>
+				<option value="attack">ataque más poderoso</option>
+				<option value="defense">defensa más resistente</option>
+				<option value="speed">más rapidos</option>
+				<option value="weight">mas pesados</option>
+			</select>
+      </p>
+
+      <p><a href="" ng-click=" reverse = !reverse ">invertir lista</a>
+      </p>
+   </div>
+	
+	<!-- AJAX A LA API POR INTERACCION DEL USUARIO -->
+	<p><span for="btnSearchApiPokemon">Encuentra tu Pokemon adecuado</span>
 		<input	id="btnSearchApiPokemon" type="search"
 					placeholder="pikachu, charmander ...." title="escribe el nombre de tu pokemon"
 					ng-model="pokeApiName" />
@@ -27,11 +64,20 @@
 
 	<ul id="list-pokemon">
 		<li	class="figure-pokemon"
-				ng-repeat="pokemon in pokemonList">
+				ng-repeat="pokemon in pokemonList | filter:query | orderBy:orderProp:reverse">
 			<figure>
 		   	<h3>{{pokemon.pokeName}} <small>pokedex nacional num {{pokemon.pokeNum}}</small></h3>
 		   	<img alt="{{pokemon.pokeImg.alt}}" ng-src="{{pokemon.pokeImg.src}}">
 		   	<figcaption>{{pokemon.pokeDesc}}</figcaption>
+		   	<ul>
+		   		<li>idList : {{pokemon.idList}}</li>
+		   		<li>pokeName : {{pokemon.pokeName}}</li>
+		   		<li>pokeNum : {{pokemon.pokeNum}}</li>
+		   		<li>attack : {{pokemon.attack}}</li>
+		   		<li>defense : {{pokemon.defense}}</li>
+		   		<li>speed : {{pokemon.speed}}</li>
+		   		<li>weight : {{pokemon.weight}}</li>
+		   	</ul>
 			</figure>
 		</li>
 	</ul>
