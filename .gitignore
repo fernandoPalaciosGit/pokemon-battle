@@ -6,6 +6,7 @@ tmp
 test/
 */img/*
 */vendor/*
+NOTAS.md
 .DS_Store
 .idea
 *.log

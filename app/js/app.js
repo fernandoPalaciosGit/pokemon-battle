@@ -11,6 +11,7 @@ window.angular.
 	]).
 	config( ['$routeProvider', '$httpProvider', function($routeProvider, $httpProvider){
 		//CROSS DOMAIN ORIGIN
+		// anulamos todos los encabezados depeticion http para que no piense que sooms un host de otro dominio (luego JSONP)
 		$httpProvider.defaults.useXDomain = true;
 		$httpProvider.defaults.withCredentials = true;
 		delete $httpProvider.defaults.headers.common["X-Requested-With"];

@@ -1,15 +1,32 @@
 <div class="view-selectionPokemon">
 	<h2>Selecciona tu pokemon de Combate</h2>
 
-	<p><input	type="search"
-					ng-model="pokeName"></p>
+	<p>Piedes elegir <strong>{{ numPokeSelect }}</strong> pokemon de esta lista</p>
+
+	<p><span for="btnSearchListPokemon">Busca un Pokemon de la lista</span>
+		<input	id="btnSearchListPokemon"
+					type="search"
+					ng-model="pokeSearchName" />
+	</p>
+
+	<p><span for="btnSearchListPokemon">Encuentra tu Pokemon adecuado</span>
+		<input	id="btnSearchApiPokemon" type="search"
+					placeholder="pikachu, charmander ...." title="escribe el nombre de tu pokemon"
+					ng-model="pokeApiName" />
+		<input type="button" value="¡¡ Buscalo !!">
+	</p>
+
+	<p>
+		<input	type="button" value="añade 10 más"
+					ng-click="loadTenPokemon()"/>
+	</p>
 
 	<ul id="list-pokemon">
 		<li	class="figure-pokemon"
 				ng-repeat="pokemon in pokemonList">
 			<figure>
-		   	<strong>{{pokemon.pokeName}} <small>num: {{pokemon.pokeNum}}</small></strong>
-		   	<!-- <img alt="{{pokemon.pokeImg.alt}}" ng-src="{{pokemon.pokeImg.src}}"> -->
+		   	<h3>{{pokemon.pokeName}} <small>pokedex nacional num {{pokemon.pokeNum}}</small></h3>
+		   	<img alt="{{pokemon.pokeImg.alt}}" ng-src="{{pokemon.pokeImg.src}}">
 		   	<!-- <figcaption>{{pokemon.pokeDesc}}</figcaption> -->
 			</figure>
 		</li>

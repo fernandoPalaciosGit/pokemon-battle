@@ -8,86 +8,80 @@ var Pokemon = function(n, num, url){
 
 // Controlador de /selection.html
 var PokemonSelectController = function ($scope, PokemonRest, PokemonFact){
-	$scope.pokemonList = [];
+	//lista de pokemon cargados en la vista
+	$scope.pokemonList = PokemonFact.listPokemon;
+	$scope.numPokeSelect = PokemonFact.listPokemon.length;
 
-	// cargar 10 pokemones más
-	$scope.loadTenPokemon = function(){
-		PokemonFact.loadPokemonAjax = [PokemonFact.loadPokemonAjax[1], PokemonFact.loadPokemonAjax[1] + 10];
-		$scope.loadPokemonList( PokemonFact.loadPokemonAjax );
-	};
+	// recuperar la cantidad de objetos pokemon creados
+	$scope.$watch('pokemonList.length', function(newValue, oldValue) {
+		$scope.numPokeSelect = newValue;
+	});
 
 	//recuperamos la lista de todos los pokemon (solo nombres)
-	$scope.loadPokemonList = function (loadPokeAjax){ // [x, y]
+	$scope.loadPokemonList = function (){
 		PokemonRest.getPokedex().
 			$promise.then( function (data){ // [270 objetos]
 
-				// desde el primero hasta el ultimo
-				for (var i = loadPokeAjax[0]; i < loadPokeAjax[1]; i++) {
+				// desde el primero hasta el ultimo (indices en factoria)
+				for (var i = PokemonFact.loadPokemonAjax[0]; i < PokemonFact.loadPokemonAjax[1]; i++) {
 					
 					var newPokemon = new Pokemon(	data.pokemon[i].name,
 															data.pokemon[i].resource_uri.split('/')[3],
 															data.pokemon[i].resource_uri );
 
 					$scope.pokemonList.push( newPokemon );
-					
-					// var dataPokemon = {
-					// 	pokeName: data.pokemon[i].name,
-					// 	pokeNum : data.pokemon[i].resource_uri.split('/')[3],
-					// 	pokeUrl : data.pokemon[i].resource_uri,
-					// 	pokeImg : {
-					// 		alt: 'imagen de '+data.pokemon[i].name,
-					// 		src: ''
-					// 	},
-					// 	pokeDesc : 'descripcion de '+data.pokemon[i].name
-					// };
 				}
 
 			}).
 			then( function (data){
-				// $scope.loadPokemonSprite(loadPokeAjax);				
+				$scope.loadPokemonSprite();				
 			});
 	};
 
 	// imagen y descripcion de los pokemons (solo los 10 primeros)
-	$scope.loadPokemonSprite = function (loadPokeAjax){
+	$scope.loadPokemonSprite = function (){
 
 		// $scope.loadPokemonAjax = loadPokeAjax;
-		var i = $scope.loadPokemonAjax[0];
+		var i = PokemonFact.loadPokemonAjax[0];
+							
+		// comprobar que estamos iterando en el rango de $scope.loadPokemonAjax
+		if( i < PokemonFact.loadPokemonAjax[1] ){
+			PokemonFact.loadPokemonAjax[0] = i + 1;
 
-		PokemonRest.getPokemon( $scope.pokemonList[ i ].pokeNum ).
-			$promise.then( function (data){
-							console.log(data);
+			PokemonRest.getPokemon( $scope.pokemonList[ i ].pokeNum ).
+				$promise.then( function (data){
 
-				PokemonRest.getSprite( data.sprites[0].resource_uri ).
-					$promise.then( function (data){
+					PokemonRest.getSprite( data.sprites[0].resource_uri ).
+						$promise.then( function (data){
 
-						$scope.pokemonList[i].pokeImg = {
-							alt : data.name,
-							src : 'http://pokeapi.co'+data.image
-						};
+							//añadimos nuevas propiedades a cada pokemon
+							$scope.pokemonList[ i ].pokeImg = {
+								alt : data.name,
+								src : 'http://pokeapi.co'+data.image
+							};
 
-						// comprobar que estamos iterando en el rango de $scope.loadPokemonAjax
-						if( i < $scope.loadPokemonAjax[1] ){
-							$scope.loadPokemonAjax[0] = i + 1;
-							$scope.loadPokemonSprite( $scope.loadPokemonAjax );
-						}
-						
-					});
+							$scope.loadPokemonSprite( );
+							
+						});
 
-			});
+				});
+		}
 
 	};
 
-
-	// recuperar de la factoria de pokemons, los que tenemos cargados con toda su informacion
-	for (var i = 0; i < PokemonFact.loadPokemonAjax[1]; i++) { 
-		$scope.pokemonList.push(PokemonFact.listPokemon[i]);
+	// cargar 10 pokemones más
+	$scope.loadTenPokemon = function(){
+		PokemonFact.loadPokemonAjax = [PokemonFact.loadPokemonAjax[1], PokemonFact.loadPokemonAjax[1] + 10];
+		// $scope.loadPokemonList( PokemonFact.loadPokemonAjax );
+		$scope.loadPokemonList();
 	};
 
-	// si es la primera, añadimos 10 pokemon a la listavez que cargamos los pokemon
+	/* si es la primera vez (tendremos vacia la lista de pokemon en la fatoia):
+		Añadimos 10 pokemon a la lista de nuestra vista */
 	if ( PokemonFact.loadPokemonAjax[1] === 0 ){
 		PokemonFact.loadPokemonAjax = [0, 10];
-		$scope.loadPokemonList( PokemonFact.loadPokemonAjax );
+		// $scope.loadPokemonList( PokemonFact.loadPokemonAjax );
+		$scope.loadPokemonList();
 	}
 
 
