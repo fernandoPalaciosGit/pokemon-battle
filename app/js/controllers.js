@@ -30,7 +30,7 @@ var PokemonSelectController = function ($scope, PokemonRest, PokemonFact){
 	$scope.allPokemonNum =  PokemonFact.listPokemonData.length;
 
 	//valores predeterminados de filtros de ordenacion 'orderBy'
-	$scope.orderProp = 'idList';
+	$scope.orderProp = ''; // 'idList'
 	$scope.reverse = 1;
 
 	// Constructor de lista de Pokemon
@@ -87,12 +87,16 @@ var PokemonSelectController = function ($scope, PokemonRest, PokemonFact){
 						});
 
 				});
+		} else {
+			//permitimos volver a cargar mas pokemones
+			document.getElementById('btnLoadTenMore').disabled = false;
 		}
 
 	};
 
 	// cargar 10 pokemones más
 	$scope.loadTenPokemon = function(){
+		document.getElementById('btnLoadTenMore').disabled = true;
 		PokemonFact.loadPokemonAjax = [PokemonFact.loadPokemonAjax[1], PokemonFact.loadPokemonAjax[1] + 10];
 		loadPokemonList();
 	};
@@ -100,6 +104,7 @@ var PokemonSelectController = function ($scope, PokemonRest, PokemonFact){
 	/* si es la primera vez (tendremos vacia la lista de pokemon en la fatoia):
 		Añadimos 10 pokemon a la lista de nuestra vista */
 	if ( PokemonFact.loadPokemonAjax[1] === 0 ){
+		document.getElementById('btnLoadTenMore').disabled = true;
 		PokemonFact.loadPokemonAjax = [0, 10];
 
 		//recuperar una unica vez la lista de pokemon y almacenarlo en una variable de la factoria
