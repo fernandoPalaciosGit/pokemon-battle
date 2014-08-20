@@ -1,5 +1,9 @@
 'use strict';
 
+var isEmpty = function (str) {
+  return (!str || 0 === str.length);
+}
+
 var Pokemon = function(i, n, num, url, dataImg, attack, defense, desc, arrEvol, speed, weight, arrMoves){
 	this.idList = i;
 	this.pokeName = n;
@@ -20,6 +24,7 @@ var Pokemon = function(i, n, num, url, dataImg, attack, defense, desc, arrEvol, 
 var PokemonSelectController = function ($scope, PokemonRest, PokemonFact){
 	//lista de pokemon cargados en la vista
 	$scope.pokemonList = PokemonFact.listPokemon;
+	$scope.pokemonApiList = PokemonFact.listPokemonData;
 
 	$scope.numPokeSelect = PokemonFact.listPokemon.length;
 	$scope.allPokemonNum =  PokemonFact.listPokemonData.length;
@@ -116,12 +121,21 @@ var PokemonSelectController = function ($scope, PokemonRest, PokemonFact){
 // Controlador de /info.html
 var PokemonInfoController = function ($scope, $urlParams, PokemonRest, PokemonFact){
 	
-	var routeParam = {
+	$scope.routeParam = {
 		id : $urlParams.id, // si accedo a esta vista por un pokemon ya cargado en nuestra lista
 		pokeUrl : window.decodeURIComponent( $urlParams.pokeId.replace(/\u0020/g, "/") )
 	};
 
-	console.log(routeParam);
+	if( isEmpty($scope.routeParam.id) ){
+		// Ajax to ApiRest for search pokemon
+		$scope.userPokemon = {};
+	}else{
+		$scope.userPokemon = PokemonFact.listPokemon[$scope.routeParam.id];
+	}
+
+	var randomPokemon = Math.floor( (Math.random() * PokemonFact.listPokemon.length) );
+	$scope.machinePokemon  = PokemonFact.listPokemon[randomPokemon];
+
 };
 
 // Controlador de /battle.html

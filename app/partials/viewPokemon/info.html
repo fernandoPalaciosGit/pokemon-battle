@@ -1,7 +1,22 @@
 <div class="view-infoPokemon">
 	<h2>Cargamos el poquemon Seleccionado con informacion exclusiva</h2>
+	<p><a href="#/selection">Volver a Elegir Pokemmon</a></p>
 
-	<p><a href="#/battle">¡¡¡ Empezar Batalla Poquemon !!!</a></p>
+	<section>
+		<articles>
+			<h2>pokemon de Jugador</h2>
+			<pre>{{ userPokemon | json }}</pre>
+		</articles>
+
+		<hr/>
+
+		<articles>
+			<h2>pokemon de Maquina</h2>
+			<pre>{{ machinePokemon | json }}</pre>
+		</articles>
+	</section>
+
+	<p><a href="#/battle/batallaaaaa">¡¡¡ Empezar Batalla Poquemon !!!</a></p>
 </div>
 
 
