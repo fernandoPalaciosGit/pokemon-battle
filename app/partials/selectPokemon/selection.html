@@ -8,7 +8,6 @@
 	<p>PUedes elegir <strong>{{ numPokeSelect }}</strong> pokemon de esta lista</p>
 
 	<!-- FILTROS DE LISTA DE POKEMON CARGADOS -->
-
 	<div class="col-md-2">
 		<p>
 			<span for="btnSearchListPokemon">Busca un Pokemon de la lista</span>
@@ -50,18 +49,30 @@
    </div>
 	
 	<!-- AJAX A LA API POR INTERACCION DEL USUARIO -->
+	<hr/>
 	<p><span for="btnSearchApiPokemon">Encuentra tu Pokemon adecuado</span>
 		<input	id="btnSearchApiPokemon" type="search"
 					placeholder="pikachu, charmander ...." title="escribe el nombre de tu pokemon"
 					ng-model="pokeApiName" />
-		<input type="button" value="¡¡ Buscalo !!">
-	</p>
 
+		<select	name="" id=""
+					ng-model="pokeApiNameSelected">
+			<option	ng-repeat="pokemon in pokemonApiList | filter:pokeApiName "
+						value="{{pokemon.resource_uri}}">{{pokemon.name}}</option>
+		</select>
+		
+		<input	type="button" data-apiurl="{{pokeApiNameSelected}}" value="¡¡ Eligelo !!"
+					ng-click="" ng-hide="!pokeApiNameSelected">
+	</p>
+	<hr/>
+
+	<!-- CARGAR 10 POKEOES MAS A NUESTRA LISTA -->
 	<p>
 		<input	type="button" value="añade 10 más"
 					ng-click="loadTenPokemon()"/>
 	</p>
-
+	
+	<!-- LISTADO DE POKEMONES POR FILTROS -->
 	<ul id="list-pokemon">
 		<li	class="figure-pokemon"
 				ng-repeat="pokemon in pokemonList | filter:query | orderBy:orderProp:reverse">
@@ -69,7 +80,7 @@
 		   	<h3>{{pokemon.pokeName}} <small>pokedex nacional num {{pokemon.pokeNum}}</small></h3>
 		   	<img alt="{{pokemon.pokeImg.alt}}" ng-src="{{pokemon.pokeImg.src}}">
 		   	<figcaption>{{pokemon.pokeDesc}}</figcaption>
-		   	<ul>
+		   	<!-- <ul>
 		   		<li>idList : {{pokemon.idList}}</li>
 		   		<li>pokeName : {{pokemon.pokeName}}</li>
 		   		<li>pokeNum : {{pokemon.pokeNum}}</li>
@@ -77,7 +88,7 @@
 		   		<li>defense : {{pokemon.defense}}</li>
 		   		<li>speed : {{pokemon.speed}}</li>
 		   		<li>weight : {{pokemon.weight}}</li>
-		   	</ul>
+		   	</ul> -->
 			</figure>
 		</li>
 	</ul>

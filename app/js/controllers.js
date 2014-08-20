@@ -19,6 +19,7 @@ var Pokemon = function(i, n, num, url, dataImg, attack, defense, desc, arrEvol, 
 var PokemonSelectController = function ($scope, PokemonRest, PokemonFact){
 	//lista de pokemon cargados en la vista
 	$scope.pokemonList = PokemonFact.listPokemon;
+
 	$scope.numPokeSelect = PokemonFact.listPokemon.length;
 	$scope.allPokemonNum =  PokemonFact.listPokemonData.length;
 
@@ -100,6 +101,8 @@ var PokemonSelectController = function ($scope, PokemonRest, PokemonFact){
 			$promise.then( function (data){
 
 				PokemonFact.listPokemonData = data.pokemon; //LISTA DE POKEMON Y URL
+				$scope.pokemonApiList = data.pokemon;
+				
 				$scope.allPokemonNum = PokemonFact.listPokemonData.length; 
 				loadPokemonList();
 
