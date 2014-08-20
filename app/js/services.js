@@ -43,6 +43,12 @@ var PokemonFactory = function(){
 	// lista de pokemon y su API URL
 	factory.listPokemonData = [];
 
+	// pokemones de combate
+	factory.listPokemonBattle = {
+		userPokemon: {},
+		machinePokemon: {}
+	};	
+
 	return factory;
 };
 

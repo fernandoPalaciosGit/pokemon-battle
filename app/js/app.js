@@ -27,7 +27,7 @@ window.angular.
 				templateUrl: 'partials/viewPokemon/info.html',
 				controller: 'PokemonInfoCtrl'
 			}).
-			when('/battle/:pokeId', {
+			when('/battle', {
 				templateUrl: 'partials/battlePokemon/battle.html',
 				controller: 'PokemonBattleCtrl'
 			}).

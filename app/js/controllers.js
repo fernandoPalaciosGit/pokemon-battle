@@ -126,7 +126,7 @@ var PokemonSelectController = function ($scope, PokemonRest, PokemonFact){
 };
 
 // Controlador de /info.html
-var PokemonInfoController = function ($scope, $urlParams, PokemonRest, PokemonFact){
+var PokemonInfoController = function ($scope, $location, $urlParams, PokemonRest, PokemonFact){
 	
 	$scope.routeParam = {
 		id : $urlParams.id, // si accedo a esta vista por un pokemon ya cargado en nuestra lista
@@ -150,8 +150,7 @@ var PokemonInfoController = function ($scope, $urlParams, PokemonRest, PokemonFa
 
 					PokemonRest.getUri( data.sprites[0].resource_uri ).
 						$promise.then( function ( data ){
-							var	listApiPoke = PokemonFact.listPokemonData,
-									dataImg = { alt: data.name, src: 'http://pokeapi.co'+data.image },
+							var	dataImg = { alt: data.name, src: 'http://pokeapi.co'+data.image },
 									pokeID = $scope.routeParam.pokeUrl.split('/')[3],
 									uri = $scope.routeParam.pokeUrl;
 
@@ -161,25 +160,45 @@ var PokemonInfoController = function ($scope, $urlParams, PokemonRest, PokemonFa
 
 							PokemonRest.getUri( descriptionUrl ).
 								$promise.then( function ( data ){
-									var	descRandom = data.description;
-									$scope.userPokemon = new Pokemon(	'no', name, pokeID, uri, dataImg, attack,
-																defense, descRandom, evol, speed, weight, moves );
+									var	descRandom = data.description,
+											newPokemon = angular.copy( new Pokemon(	'no', name, pokeID, uri, dataImg, attack,
+																									defense, descRandom, evol, speed, weight, moves ));
+									$scope.userPokemon = newPokemon;
+									PokemonFact.listPokemonBattle.userPokemon = newPokemon;
 								} );
 
 						});
 
 				});
 	}else{
-		$scope.userPokemon = PokemonFact.listPokemon[$scope.routeParam.id];
+		var newPokemon = angular.copy( PokemonFact.listPokemon[$scope.routeParam.id] );
+		$scope.userPokemon = newPokemon;
+		PokemonFact.listPokemonBattle.userPokemon = newPokemon;
 	}
 
 	var randomPokemon = Math.floor( (Math.random() * PokemonFact.listPokemon.length) );
-	$scope.machinePokemon  = PokemonFact.listPokemon[randomPokemon];
-
+	var newPokemon = angular.copy( PokemonFact.listPokemon[randomPokemon] );
+	$scope.machinePokemon = newPokemon;
+	PokemonFact.listPokemonBattle.machinePokemon = newPokemon;
+	
+	$scope.loadBattle = function (){
+		if( isEmpty($scope.userPokemon) || isEmpty($scope.machinePokemon) ){
+			window.alert('Falta algun contrincario para la batalla\nSelecciona otro pokemon');
+			 $location.path('/selection').replace();
+		}else{
+			$location.path('/battle').replace();
+		}
+	};
 };
 
 // Controlador de /battle.html
-var PokemonBattleController = function ($scope){};
+var PokemonBattleController = function ($scope, $location, PokemonFact){
+	$scope.userBattlePokemon = PokemonFact.listPokemonBattle.userPokemon;
+	$scope.machineBattlePokemon = PokemonFact.listPokemonBattle.machinePokemon;
+
+
+	console.log($scope.userBattlePokemon, $scope.machineBattlePokemon);
+};
 
 // SCOPE DE CONTROLADORES
 angular.module('pokemonApp.controllers', []).
@@ -189,5 +208,5 @@ angular.module('pokemonApp.controllers', []).
 
 //INJECCION DE DEPENDENCIAS
 PokemonSelectController.$inject = [ '$scope', 'PokemonRestFullFact', 'PokemonFact'];
-PokemonInfoController.$inject = [ '$scope', '$routeParams', 'PokemonRestFullFact', 'PokemonFact' ];
-PokemonBattleController.$inject = [ '$scope' ];
+PokemonInfoController.$inject = [ '$scope', '$location', '$routeParams', 'PokemonRestFullFact', 'PokemonFact' ];
+PokemonBattleController.$inject = [ '$scope', '$location', 'PokemonFact' ];
