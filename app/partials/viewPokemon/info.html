@@ -1,18 +1,74 @@
 <div class="view-infoPokemon">
 	<h2>Cargamos el poquemon Seleccionado con informacion exclusiva</h2>
 	<p><a href="#/selection">Volver a Elegir Pokemmon</a></p>
-
+	
 	<section>
 		<articles>
 			<h2>pokemon de Jugador</h2>
-			<pre>{{ userPokemon | json }}</pre>
+			<figure>
+		   	<h3>
+					{{userPokemon.pokeName}}
+		   		<small>pokedex nacional num {{userPokemon.pokeNum}}</small>
+		   	</h3>
+
+		   	<img alt="{{userPokemon.pokeImg.alt}}" ng-src="{{userPokemon.pokeImg.src}}">
+		   	
+		   	<figcaption>{{userPokemon.pokeDesc}}</figcaption>
+		   	<dl>
+		   		<dt>fuerza de ataque</dt>
+		   			<dd>{{userPokemon.attack}}</dd>
+		   		<dt>capacidad de defensa</dt>
+		   			<dd>{{userPokemon.defense}}</dd>
+		   		<dt>velocidad</dt>
+		   			<dd>{{userPokemon.speed}}</dd>
+		   		<dt>peso</dt>
+		   			<dd>{{userPokemon.weight}}</dd>
+		   		<dt>Evoluciones</dt>
+		   			<dd ng-repeat="evol in userPokemon.evolutions">
+		   				{{evol.to}} -> nivel {{evol.level}}
+		   			</dd>
+		   		<dt>Movimientos de combate</dt>
+		   			<dd ng-repeat="move in userPokemon.moves">
+		   				{{move.name}}, learn by {{move.learn_type}}
+		   			</dd>
+		   	</dl>
+			</figure>
+			<!-- <pre>{{ userPokemon | json }}</pre> -->
 		</articles>
 
 		<hr/>
 
 		<articles>
 			<h2>pokemon de Maquina</h2>
-			<pre>{{ machinePokemon | json }}</pre>
+			<figure>
+		   	<h3>
+					{{machinePokemon.pokeName}}
+		   		<small>pokedex nacional num {{machinePokemon.pokeNum}}</small>
+		   	</h3>
+
+		   	<img alt="{{machinePokemon.pokeImg.alt}}" ng-src="{{machinePokemon.pokeImg.src}}">
+		   	
+		   	<figcaption>{{machinePokemon.pokeDesc}}</figcaption>
+		   	<dl>
+		   		<dt>fuerza de ataque</dt>
+		   			<dd>{{machinePokemon.attack}}</dd>
+		   		<dt>capacidad de defensa</dt>
+		   			<dd>{{machinePokemon.defense}}</dd>
+		   		<dt>velocidad</dt>
+		   			<dd>{{machinePokemon.speed}}</dd>
+		   		<dt>peso</dt>
+		   			<dd>{{machinePokemon.weight}}</dd>
+		   		<dt>Evoluciones</dt>
+		   			<dd ng-repeat="evol in machinePokemon.evolutions">
+		   				{{evol.to}} -> nivel {{evol.level}}
+		   			</dd>
+		   		<dt>Movimientos de combate</dt>
+		   			<dd ng-repeat="move in machinePokemon.moves">
+		   				{{move.name}}, learn by {{move.learn_type}}
+		   			</dd>
+		   	</dl>
+			</figure>
+			<!-- <pre>{{ machinePokemon | json }}</pre> -->
 		</articles>
 	</section>
 
