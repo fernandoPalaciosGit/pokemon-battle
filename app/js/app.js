@@ -1,6 +1,24 @@
 'use strict';
 
+var isEmpty = function (str) {
+  return (!str || 0 === str.length);
+};
 
+var Pokemon = function(i, n, num, url, dataImg, attack, defense, desc, arrEvol, speed, weight, arrMoves){
+	this.idList = i;
+	this.pokeName = n;
+	this.pokeNum = parseInt(num, 10);
+	this.pokeUrl = url;
+	this.pokeImg = dataImg;
+	this.attack = parseInt(attack, 10);
+	this.defense = parseInt(defense, 10);
+	this.evolutions = arrEvol; // [ objects ]
+	this.speed = parseInt(speed, 10);
+	this.weight = parseInt(weight, 10);
+	this.moves = arrMoves; // [ objects ]
+	this.pokeDesc = desc;
+	// console.log(this);
+};
 window.angular.
 	module('pokemonApp', [
 		'ngRoute',
@@ -21,15 +39,15 @@ window.angular.
 		$routeProvider.
 			when('/selection', {
 				templateUrl: 'partials/selectPokemon/selection.html',
-				controller: 'PokemonSelectCtrl'
+				controller: PokemonSelectController
 			}).
 			when('/info/:pokeId', {
 				templateUrl: 'partials/viewPokemon/info.html',
-				controller: 'PokemonInfoCtrl'
+				controller: PokemonInfoController
 			}).
 			when('/battle', {
 				templateUrl: 'partials/battlePokemon/battle.html',
-				controller: 'PokemonBattleCtrl'
+				controller: PokemonBattleController
 			}).
 			otherwise({redirectTo: '/selection'});
 	}]);

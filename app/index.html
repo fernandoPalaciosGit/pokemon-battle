@@ -17,7 +17,13 @@
   <link rel="stylesheet" href="css/app.css"/>
   <link rel="stylesheet" href="bower_components/github-fork-ribbon-css/gh-fork-ribbon.css">
   
-
+  <!-- In development use:
+  <script src="bower_components/angular/angular.js"></script>
+  -->
+  <!-- <script src="bower_components/html5-boilerplate/js/vendor/jquery-1.10.2.min.js"/> -->
+  <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.22/angular.min.js"></script>
+  <script src="bower_components/angular-route/angular-route.js"></script>
+  <script src="bower_components/angular-resource/angular-resource.js"></script>
 </head>
 <body>
    <!-- TOP LEFT RIBBON -->
@@ -31,17 +37,11 @@
     <div ng-view class="view-frame"></div>
   </div>
   
-  <!-- In production use:
-  <script src="bower_components/angular/angular.js"></script>
-  -->
-  <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.22/angular.min.js"></script>
-  <script src="bower_components/angular-route/angular-route.js"></script>
-  <script src="bower_components/angular-resource/angular-resource.js"></script>
-  <!-- <script src="bower_components/html5-boilerplate/js/vendor/jquery-1.10.2.min.js"/> -->
-
   <script src="js/app.js"></script>
+  <script src="partials/selectPokemon/selection.ctrl.js"></script>
+  <script src="partials/viewPokemon/info.ctrl.js"></script>
+  <script src="partials/battlePokemon/battle.ctrl.js"></script>
   <script src="js/services.js"></script>
-  <script src="js/controllers.js"></script>
   <script src="js/filters.js"></script>
   <script src="js/directives.js"></script>
 </body>
