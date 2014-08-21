@@ -2,6 +2,9 @@
 
 // CONTROLADOR de /selection.html
 var PokemonSelectController = function ($scope, PokemonRest, PokemonFact){
+	//mostramos el preloader
+	document.getElementsByClassName('preloaderPokemon')[0].style.visibility = 'visible';
+
 	//lista de pokemon cargados en la vista
 	$scope.pokemonList = PokemonFact.listPokemon;
 	$scope.pokemonApiList = PokemonFact.listPokemonData;
@@ -17,7 +20,10 @@ var PokemonSelectController = function ($scope, PokemonRest, PokemonFact){
 	var loadPokemonList = function (){
 
 		var i = PokemonFact.loadPokemonAjax[0];
-							
+
+		// proceso de carga de assets
+		progresoCarga(i, PokemonFact.loadPokemonAjax[1]);
+
 		// comprobar que estamos iterando en el rango de $scope.loadPokemonAjax
 		if( i < PokemonFact.loadPokemonAjax[1] ){
 			PokemonFact.loadPokemonAjax[0] = i + 1;
@@ -57,9 +63,6 @@ var PokemonSelectController = function ($scope, PokemonRest, PokemonFact){
 									// cargamos el pokemon en la factoria,
 									// el digest de Angular se encargra de asignar los valores a $scope.pokemonList
 									PokemonFact.listPokemon.push( newPokemon );
-
-									// contador de pokemon en lista
-									$scope.numPokeSelect = PokemonFact.listPokemon.length;
 									
 									loadPokemonList(); // RECURSIVIDAD
 								} );
@@ -68,25 +71,23 @@ var PokemonSelectController = function ($scope, PokemonRest, PokemonFact){
 
 				});
 		} else {
-			//permitimos volver a cargar mas Pokemones
-			if(	!!document.getElementById('btnLoadTenMore') ){ //problem digest
-					document.getElementById('btnLoadTenMore').disabled = false;
-			}
+			// finalizo la carga de la lista
 		}
 
 	};
 
 	// cargar 10 pokemones más
 	$scope.loadTenPokemon = function(){
-		document.getElementById('btnLoadTenMore').disabled = true;
+		// document.getElementById('btnLoadTenMore').disabled = true;
 		PokemonFact.loadPokemonAjax = [PokemonFact.loadPokemonAjax[1], PokemonFact.loadPokemonAjax[1] + 10];
+		//inicializar preloader
+		prepararCanvas();
 		loadPokemonList();
 	};
 
-	/* si es la primera vez (tendremos vacia la lista de pokemon en la fatoia):
+	/* si es la PRIMERA VEZ (tendremos vacia la lista de pokemon en la fatoia):
 		Añadimos 10 pokemon a la lista de nuestra vista */
 	if ( PokemonFact.loadPokemonAjax[1] === 0 ){
-			document.getElementById('btnLoadTenMore').disabled = true;
 			PokemonFact.loadPokemonAjax = [0, 10];
 
 		//recuperar una unica vez la lista de pokemon y almacenarlo en una variable de la factoria
@@ -96,7 +97,9 @@ var PokemonSelectController = function ($scope, PokemonRest, PokemonFact){
 				PokemonFact.listPokemonData = data.pokemon; //LISTA DE POKEMON Y URL
 				$scope.pokemonApiList = data.pokemon;
 
-				$scope.allPokemonNum = PokemonFact.listPokemonData.length; 
+				$scope.allPokemonNum = PokemonFact.listPokemonData.length;
+				//inicializar preloader
+				prepararCanvas();
 				loadPokemonList();
 
 			});
@@ -106,7 +109,6 @@ var PokemonSelectController = function ($scope, PokemonRest, PokemonFact){
 //INJECCION DE DEPENDENCIAS
 window.angular.module('pokemonApp.controllers', []).
   controller( 'PokemonSelectCtrl', PokemonSelectController );
-
 
 //INJECCION DE DEPENDENCIAS
 PokemonSelectController.$inject = [ '$scope', 'PokemonRestFullFact', 'PokemonFact'];

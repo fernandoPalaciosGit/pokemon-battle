@@ -1,30 +1,57 @@
-/* app css stylesheet */
-
-.menu {
-  list-style: none;
-  border-bottom: 0.1em solid black;
-  margin-bottom: 2em;
-  padding: 0 0 0.5em;
+.mostrar{
+  display: none;
 }
-
-.menu:before {
-  content: "[";
+.preloaderPokemon{
+  margin: 0 auto;
+  width: 0;
 }
-
-.menu:after {
-  content: "]";
-}
-
-.menu > li {
+#porcentaje,
+#canvasPreloader{
+  font-weight: bold;
+  text-transform: capitalize;
+  letter-spacing: 1px;
+  color: #000;
+  font-size: 24px;
+  position: absolute;
+  /*border-radius: 100px;*/
+  /*border: 4px solid #000;*/
+  
+  /*centrar verticalmente*/
+  top: 43%;
+  top: calc( 50% - 54px);
+  z-index: 10;
+  margin: 0 auto;
+  width: 100px;
+  height: 100px;
+  
+  /*centrar horizontalmente*/
   display: inline;
+  text-align: center;
+  margin-left: -54px;
+  
+  /*corregir posicion por el grues grueso del preloader*/
+  line-height: 108px;
+  text-indent: 8px;
+}
+#canvasPreloader{
+  width: 200px;
+  height: 200px;
+  border-radius: 0;
+  /*background-color: #000;*/
+  z-index: 5;
+  top: 28%;
+  top: calc( 50% - 100px);
+  margin-left: -100px;
+}
+/*#wrapperImages{
+  display: none;
+  position: relative;
+  border: 4px solid #fff;
+  height: 500px;
+  margin-top: 25px;
 }
 
-.menu > li:before {
-  content: "|";
-  padding-right: 0.3em;
+#wrapperImages img{
+  width: 40%;
 }
-
-.menu > li:nth-child(1):before {
-  content: "";
-  padding: 0;
-}
+*/

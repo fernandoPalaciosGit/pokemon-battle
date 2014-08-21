@@ -2,6 +2,9 @@
 
 // CONTROLADOR de /battle.html
 var PokemonBattleController = function ($scope, $location, PokemonFact){
+	// ocultamos el preloader
+	document.getElementsByClassName('preloaderPokemon')[0].style.visibility = 'hidden';
+	
 	$scope.userBattlePokemon = PokemonFact.listPokemonBattle.userPokemon;
 	$scope.machineBattlePokemon = PokemonFact.listPokemonBattle.machinePokemon;
 

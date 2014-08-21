@@ -2,7 +2,9 @@
 
 // CONTROLADOR de /info.html
 var PokemonInfoController = function ($scope, $location, $urlParams, PokemonRest, PokemonFact){
-	
+	// ocultamos el preloader
+	document.getElementsByClassName('preloaderPokemon')[0].style.visibility = 'hidden';
+
 	$scope.routeParam = {
 		id : $urlParams.id, // si accedo a esta vista por un pokemon ya cargado en nuestra lista
 		pokeUrl : window.decodeURIComponent( $urlParams.pokeId.replace(/\u0020/g, "/") )
@@ -14,14 +16,14 @@ var PokemonInfoController = function ($scope, $location, $urlParams, PokemonRest
 				$promise.then( function ( data ){
 
 					// datos de interes a nuestros pokemon
-					var	attack = data.attack,
-							defense = data.defense,
-							desc = data.descriptions,
-							evol = data.evolutions,
-							speed = data.speed,
-							weight = data.weight,
-							moves = data.moves,
-							name = data.name;
+					var	attack		= data.attack,
+							defense      = data.defense,
+							desc         = data.descriptions,
+							evol         = data.evolutions,
+							speed        = data.speed,
+							weight       = data.weight,
+							moves        = data.moves,
+							name         = data.name;
 
 					PokemonRest.getUri( data.sprites[0].resource_uri ).
 						$promise.then( function ( data ){
@@ -59,7 +61,7 @@ var PokemonInfoController = function ($scope, $location, $urlParams, PokemonRest
 	$scope.loadBattle = function (){
 		if( isEmpty($scope.userPokemon) || isEmpty($scope.machinePokemon) ){
 			window.alert('Falta algun contrincario para la batalla\nSelecciona otro pokemon');
-			 $location.path('/selection').replace();
+			$location.path('/selection').replace();
 		}else{
 			$location.path('/battle').replace();
 		}
